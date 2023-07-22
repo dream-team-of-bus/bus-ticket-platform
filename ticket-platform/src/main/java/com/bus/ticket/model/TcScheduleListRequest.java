@@ -44,12 +44,12 @@ public class TcScheduleListRequest {
      * 第几页
      */
     @JsonProperty("page")
-    private Integer page;
+    private Integer page = 1;
     /**
      * 分页大小
      */
     @JsonProperty("pageSize")
-    private Integer pageSize;
+    private Integer pageSize = 50;
 
     @JsonProperty("depId")
     private Integer depId;
