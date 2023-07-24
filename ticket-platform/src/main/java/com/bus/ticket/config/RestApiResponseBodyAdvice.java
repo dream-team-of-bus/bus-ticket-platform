@@ -50,13 +50,8 @@ public class RestApiResponseBodyAdvice implements ResponseBodyAdvice<Object> {
     public ResponseEntity<Object> handleException(Exception ex, WebRequest request) {
         Map<String, Object> wrapper = new HashMap<>(4);
         log.error("unexpect exception: request={}", request, ex);
-        if (ex instanceof IllegalArgumentException) {
-            wrapper.put("code", "10000");
-            wrapper.put("message", "参数错误:" + ex.getMessage());
-        } else {
-            wrapper.put("code", "10000");
-            wrapper.put("message", "系统错误");
-        }
+        wrapper.put("code", "10000");
+        wrapper.put("message", "系统错误：" + ex.getMessage());
         return ResponseEntity.ok(wrapper);
     }
 }
