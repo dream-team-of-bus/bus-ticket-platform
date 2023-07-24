@@ -5,8 +5,8 @@ import lombok.ToString;
 
 /**
  * 分页模型。
- * 
- * @author Wu.Zheng
+ *
+ * @author honglixiang
  */
 @ToString
 @EqualsAndHashCode
@@ -17,7 +17,7 @@ public class PageInfo implements java.io.Serializable {
     /**
      * 默认的当前页数。
      */
-    public static final int DEFAULT_PAGE_IDNEX = 1;
+    public static final int DEFAULT_PAGE_INDEX = 1;
 
     /**
      * 默认的页面记录数。
@@ -75,11 +75,11 @@ public class PageInfo implements java.io.Serializable {
     private Integer endIndex;
 
     public PageInfo() {
-        this(DEFAULT_PAGE_IDNEX, DEFAULT_PAGE_SIZE, null, null);
+        this(DEFAULT_PAGE_INDEX, DEFAULT_PAGE_SIZE, null, null);
     }
 
     public PageInfo(String orderBy, String orderType) {
-        this(DEFAULT_PAGE_IDNEX, DEFAULT_PAGE_SIZE, orderBy, orderType);
+        this(DEFAULT_PAGE_INDEX, DEFAULT_PAGE_SIZE, orderBy, orderType);
     }
 
     public PageInfo(int pageIndex, int pageSize) {
@@ -230,5 +230,4 @@ public class PageInfo implements java.io.Serializable {
     public void setOrderType(String orderType) {
         this.orderType = orderType;
     }
-
 }
