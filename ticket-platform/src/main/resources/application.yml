@@ -1,7 +1,8 @@
-# 应用服务 WEB 访问端口
 server:
-  port: 8080
+  port: 7777
 spring:
+  application:
+    name: bus-ticket-platform-server
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://10.58.3.4:3306/ticket-platform?useUnicode=true&characterEncoding=utf8&useSSL=false&allowMultiQueries=true
@@ -10,8 +11,7 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
 
-#下面这些内容是为了让MyBatis映射
-#指定Mybatis的Mapper文件
+
 mybatis:
   mapper-locations: classpath:mapper/*xml
   #指定Mybatis的实体目录
