@@ -17,4 +17,4 @@ jobs:
       - name: 项目打包
         run: mvn -B package
       - name: 上传jar包
-        run: sshpass -p ${{secrets.TENCENT_PASSWORD}} scp -r .target/ticket-platform-0.0.1-SNAPSHOT.jar ${{secrets.TENCENT_USERNAME}}@${{variables.TENCENT_IP}}:/data/bus-ticket/docker-build/apps/ticket-platform.jar 
+        run: sshpass -p ${{secrets.TENCENT_PASSWORD}} scp -r .target/ticket-platform-0.0.1-SNAPSHOT.jar ${{secrets.TENCENT_USERNAME}}@$TENCENT_IP:/data/bus-ticket/docker-build/apps/ticket-platform.jar 
