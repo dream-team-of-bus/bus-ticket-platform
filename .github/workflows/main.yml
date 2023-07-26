@@ -18,6 +18,6 @@ jobs:
       - name: 项目打包
         run: cd ticket-platform && mvn -B package
       - name: 上传jar包
-        run: sshpass -p ${{secrets.TENCENT_PASSWORD}} scp ./ticket-platform/target/ticket-platform-0.0.1-SNAPSHOT.jar ${{secrets.TENCENT_USERNAME}}@${{vars.TENCENT_IP}}:/data/bus-ticket/docker-build/apps
+        run: sshpass -p ${{secrets.TENCENT_PASSWORD}} scp -o StrictHostKeyChecking=no ./ticket-platform/target/ticket-platform-0.0.1-SNAPSHOT.jar ${{secrets.TENCENT_USERNAME}}@${{vars.TENCENT_IP}}:/data/bus-ticket/docker-build/apps/ticket-platform.jar
       - name: 触发服务器上的deploy脚本
-        run: sshpass -p ${{secrets.TENCENT_PASSWORD}} ssh ${{secrets.TENCENT_USERNAME}}@${{vars.TENCENT_IP}} "cd /data/bus-ticket/docker-build/apps && mv -f ticket-platform-0.0.1-SNAPSHOT.jar ticket-platform.jar && deploy"
+        run: sshpass -p ${{secrets.TENCENT_PASSWORD}} ssh -o StrictHostKeyChecking=no ${{secrets.TENCENT_USERNAME}}@${{vars.TENCENT_IP}} "deploy"
