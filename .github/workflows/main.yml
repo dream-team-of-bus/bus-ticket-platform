@@ -1,0 +1,20 @@
+name: bus-ticket自动构建部署
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 拉取最新代码
+        uses: actions/checkout@v3
+      - name: 设置JDK8
+        uses: actions/setup-java@3
+        with:
+          java-version: '8'
+          cache: 'maven'
+      - name: 项目打包
+        run: mvn -B package
+      - name: 上传jar包
+        run: sshpass -p ${{secrets.TENCENT_PASSWORD}} scp -r .target/ticket-platform-0.0.1-SNAPSHOT.jar ${{secrets.TENCENT_USERNAME}}@${{variables.TENCENT_IP}}:/data/bus-ticket/docker-build/apps/ticket-platform.jar 
