@@ -1,6 +1,9 @@
 server:
   port: 7777
 spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher # 兼容Swagger3
   application:
     name: bus-ticket-platform-server
   datasource:
@@ -11,6 +14,8 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
 
+swagger:
+  enabled: true
 
 mybatis:
   mapper-locations: classpath:mapper/*xml
