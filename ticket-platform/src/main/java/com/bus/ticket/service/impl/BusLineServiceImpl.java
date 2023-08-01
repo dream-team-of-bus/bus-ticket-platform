@@ -49,6 +49,11 @@ public class BusLineServiceImpl implements BusLineService {
         return new PageBean<>(pageQuery, list, total);
     }
 
+    @Override
+    public List<BusLine> query(BusLinePageQuery pageQuery) {
+        return this.busLineDao.queryAll(pageQuery);
+    }
+
     /**
      * 新增数据
      *

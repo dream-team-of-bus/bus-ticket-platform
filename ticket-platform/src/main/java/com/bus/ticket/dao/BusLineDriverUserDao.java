@@ -4,16 +4,16 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.bus.ticket.entity.BusLine;
-import com.bus.ticket.model.query.BusLinePageQuery;
+import com.bus.ticket.entity.BusLineDriverUser;
+import com.bus.ticket.model.query.BusLineDriverUserPageQuery;
 
 /**
- * 汽车线路(BusLine)表数据库访问层
+ * 线路关联的司机信息(BusLineDriverUser)表数据库访问层
  *
- * @author makejava
- * @since 2023-07-28 09:38:37
+ * @author honglixiang
+ * @since 2023-07-31 16:08:53
  */
-public interface BusLineDao {
+public interface BusLineDriverUserDao {
 
     /**
      * 通过ID查询单条数据
@@ -22,7 +22,7 @@ public interface BusLineDao {
      *            主键
      * @return 实例对象
      */
-    BusLine queryById(Integer id);
+    BusLineDriverUser queryById(Integer id);
 
     /**
      * 查询指定行数据
@@ -31,15 +31,15 @@ public interface BusLineDao {
      *            查询条件
      * @return 对象列表
      */
-    List<BusLine> queryAllByLimit(BusLinePageQuery pageQuery);
+    List<BusLineDriverUser> queryAllByLimit(BusLineDriverUserPageQuery pageQuery);
 
     /**
-     * 查询所有
+     * 查询所有数据
      * 
      * @param pageQuery
      * @return
      */
-    List<BusLine> queryAll(BusLinePageQuery pageQuery);
+    List<BusLineDriverUser> queryAll(BusLineDriverUserPageQuery pageQuery);
 
     /**
      * 统计总行数
@@ -48,45 +48,45 @@ public interface BusLineDao {
      *            查询条件
      * @return 总行数
      */
-    int count(BusLinePageQuery pageQuery);
+    int count(BusLineDriverUserPageQuery pageQuery);
 
     /**
      * 新增数据
      *
-     * @param busLine
+     * @param busLineDriverUser
      *            实例对象
      * @return 影响行数
      */
-    int insert(BusLine busLine);
+    int insert(BusLineDriverUser busLineDriverUser);
 
     /**
      * 批量新增数据（MyBatis原生foreach方法）
      *
      * @param entities
-     *            List<BusLine> 实例对象列表
+     *            List<BusLineDriverUser> 实例对象列表
      * @return 影响行数
      */
-    int insertBatch(@Param("entities") List<BusLine> entities);
+    int insertBatch(@Param("entities") List<BusLineDriverUser> entities);
 
     /**
      * 批量新增或按主键更新数据（MyBatis原生foreach方法）
      *
      * @param entities
-     *            List<BusLine> 实例对象列表
+     *            List<BusLineDriverUser> 实例对象列表
      * @return 影响行数
      * @throws org.springframework.jdbc.BadSqlGrammarException
      *             入参是空List的时候会抛SQL语句错误的异常，请自行校验入参
      */
-    int insertOrUpdateBatch(@Param("entities") List<BusLine> entities);
+    int insertOrUpdateBatch(@Param("entities") List<BusLineDriverUser> entities);
 
     /**
      * 修改数据
      *
-     * @param busLine
+     * @param busLineDriverUser
      *            实例对象
      * @return 影响行数
      */
-    int update(BusLine busLine);
+    int update(BusLineDriverUser busLineDriverUser);
 
     /**
      * 通过主键删除数据

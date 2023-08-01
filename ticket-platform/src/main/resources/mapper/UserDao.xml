@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bus.ticket.dao.UserDao">
+
+    <resultMap type="com.bus.ticket.entity.User" id="UserMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="type" column="type" jdbcType="INTEGER"/>
+        <result property="wxOpenId" column="wx_open_id" jdbcType="VARCHAR"/>
+        <result property="wxUnionId" column="wx_union_id" jdbcType="VARCHAR"/>
+        <result property="nickName" column="nick_name" jdbcType="VARCHAR"/>
+        <result property="headUrl" column="head_url" jdbcType="VARCHAR"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="creationTime" column="creation_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="UserMap">
+        select id,
+               name,
+               type,
+               wx_open_id,
+               wx_union_id,
+               nick_name,
+               head_url,
+               phone,
+               creation_time,
+               update_time
+        from user
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="UserMap" parameterType="com.bus.ticket.model.query.UserPageQuery">
+        select
+        id, name, type, wx_open_id, wx_union_id, nick_name, head_url, phone, creation_time, update_time
+        from user
+        <include refid="where_query"/>
+        <if test="orderBy != null and orderType != null">
+            order by ${orderBy} ${orderType}
+        </if>
+        limit #{startIndex}, #{endIndex}
+    </select>
+
+    <sql id="where_query">
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="name != null and name != ''">
+                and name = #{name}
+            </if>
+            <if test="type != null">
+                and type = #{type}
+            </if>
+            <if test="wxOpenId != null and wxOpenId != ''">
+                and wx_open_id = #{wxOpenId}
+            </if>
+            <if test="wxUnionId != null and wxUnionId != ''">
+                and wx_union_id = #{wxUnionId}
+            </if>
+            <if test="nickName != null and nickName != ''">
+                and nick_name = #{nickName}
+            </if>
+            <if test="headUrl != null and headUrl != ''">
+                and head_url = #{headUrl}
+            </if>
+            <if test="phone != null and phone != ''">
+                and phone = #{phone}
+            </if>
+            <if test="creationTime != null">
+                and creation_time = #{creationTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+    </sql>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Integer" parameterType="com.bus.ticket.model.query.UserPageQuery">
+        select count(1) from user
+        <include refid="where_query"/>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into user(name, type, wx_open_id, wx_union_id, nick_name, head_url, phone, creation_time, update_time)
+        values (#{name}, #{type}, #{wxOpenId}, #{wxUnionId}, #{nickName}, #{headUrl}, #{phone}, #{creationTime},
+                #{updateTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into user(name, type, wx_open_id, wx_union_id, nick_name, head_url, phone, creation_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.name}, #{entity.type}, #{entity.wxOpenId}, #{entity.wxUnionId}, #{entity.nickName},
+            #{entity.headUrl}, #{entity.phone}, #{entity.creationTime}, #{entity.updateTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into user(name, type, wx_open_id, wx_union_id, nick_name, head_url, phone, creation_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.name}, #{entity.type}, #{entity.wxOpenId}, #{entity.wxUnionId}, #{entity.nickName},
+            #{entity.headUrl}, #{entity.phone}, #{entity.creationTime}, #{entity.updateTime})
+        </foreach>
+        on duplicate key update
+        name = values(name),
+        type = values(type),
+        wx_open_id = values(wx_open_id),
+        wx_union_id = values(wx_union_id),
+        nick_name = values(nick_name),
+        head_url = values(head_url),
+        phone = values(phone),
+        creation_time = values(creation_time),
+        update_time = values(update_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update user
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="type != null">
+                type = #{type},
+            </if>
+            <if test="wxOpenId != null and wxOpenId != ''">
+                wx_open_id = #{wxOpenId},
+            </if>
+            <if test="wxUnionId != null and wxUnionId != ''">
+                wx_union_id = #{wxUnionId},
+            </if>
+            <if test="nickName != null and nickName != ''">
+                nick_name = #{nickName},
+            </if>
+            <if test="headUrl != null and headUrl != ''">
+                head_url = #{headUrl},
+            </if>
+            <if test="phone != null and phone != ''">
+                phone = #{phone},
+            </if>
+            <if test="creationTime != null">
+                creation_time = #{creationTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from user
+        where id = #{id}
+    </delete>
+
+</mapper>
+

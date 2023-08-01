@@ -1,10 +1,13 @@
 package com.bus.ticket.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,10 +16,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bus.ticket.entity.BusLine;
+import com.bus.ticket.entity.BusLineDriverUser;
+import com.bus.ticket.entity.User;
 import com.bus.ticket.model.BusLineBaseVo;
+import com.bus.ticket.model.UserBaseVo;
 import com.bus.ticket.model.common.PageBean;
+import com.bus.ticket.model.query.BusLineDriverUserPageQuery;
 import com.bus.ticket.model.query.BusLinePageQuery;
+import com.bus.ticket.model.query.UserPageQuery;
+import com.bus.ticket.service.BusLineDriverUserService;
 import com.bus.ticket.service.BusLineService;
+import com.bus.ticket.service.UserService;
 import com.bus.ticket.util.StreamUtils;
 
 import io.swagger.annotations.Api;
@@ -35,6 +45,10 @@ public class BusLineController {
 
     @Resource
     private BusLineService busLineService;
+    @Resource
+    private BusLineDriverUserService driverUserService;
+    @Resource
+    private UserService userService;
 
     @ApiOperation(value = "汽车线路分页查询", notes = "汽车线路分页查询")
     @PostMapping("busLine/pageQuery/admin")
@@ -50,6 +64,32 @@ public class BusLineController {
         PageBean<BusLine> pageBean = this.busLineService.queryByPage(pageQuery);
         List<BusLineBaseVo> vos = StreamUtils.toList(pageBean.getPageDatas(), v -> BusLineBaseVo.convert(v));
         return new PageBean<>(pageBean, vos, pageBean.getTotalPages());
+    }
+
+    @ApiOperation(value = "汽车线路司机分页查询", notes = "汽车线路司机分页查询")
+    @PostMapping("busLine/{id}/driver")
+    public PageBean<UserBaseVo> pageQueryDrivers(
+        @ApiParam(value = "主键ID", required = true) @PathVariable("id") Integer id,
+        @ApiParam(value = "分页查询参数", required = true) @RequestBody UserPageQuery userPageQuery) {
+        BusLineDriverUserPageQuery driverUserPageQuery = new BusLineDriverUserPageQuery();
+        driverUserPageQuery.setBusLineId(id);
+        List<BusLineDriverUser> driverUsers = driverUserService.query(driverUserPageQuery);
+        if (CollectionUtils.isEmpty(driverUsers)) {
+            return new PageBean<>();
+        }
+        Set<Integer> userIds = StreamUtils.toSet(driverUsers, BusLineDriverUser::getUserId);
+        userPageQuery.setIds(new ArrayList<>(userIds));
+        PageBean<User> userPageBean = userService.queryByPage(userPageQuery);
+        List<UserBaseVo> vos = StreamUtils.toList(userPageBean.getPageDatas(), v -> UserBaseVo.convert(v));
+        return new PageBean<>(userPageBean, vos, userPageBean.getTotalPages());
+    }
+
+    @ApiOperation(value = "汽车线路查询", notes = "汽车线路查询")
+    @PostMapping("busLine/list")
+    public List<BusLineBaseVo>
+        query(@ApiParam(value = "分页查询参数", required = true) @RequestBody BusLinePageQuery pageQuery) {
+        List<BusLine> list = this.busLineService.query(pageQuery);
+        return StreamUtils.toList(list, v -> BusLineBaseVo.convert(v));
     }
 
     @ApiOperation(value = "获取汽车线路详情", notes = "根据ID获取汽车线路详细信息")

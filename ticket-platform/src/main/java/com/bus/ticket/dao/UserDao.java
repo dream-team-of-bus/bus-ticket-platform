@@ -4,16 +4,16 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.bus.ticket.entity.BusLine;
-import com.bus.ticket.model.query.BusLinePageQuery;
+import com.bus.ticket.entity.User;
+import com.bus.ticket.model.query.UserPageQuery;
 
 /**
- * 汽车线路(BusLine)表数据库访问层
+ * (User)表数据库访问层
  *
- * @author makejava
- * @since 2023-07-28 09:38:37
+ * @author honglixiang
+ * @since 2023-07-31 16:36:00
  */
-public interface BusLineDao {
+public interface UserDao {
 
     /**
      * 通过ID查询单条数据
@@ -22,7 +22,7 @@ public interface BusLineDao {
      *            主键
      * @return 实例对象
      */
-    BusLine queryById(Integer id);
+    User queryById(Integer id);
 
     /**
      * 查询指定行数据
@@ -31,15 +31,7 @@ public interface BusLineDao {
      *            查询条件
      * @return 对象列表
      */
-    List<BusLine> queryAllByLimit(BusLinePageQuery pageQuery);
-
-    /**
-     * 查询所有
-     * 
-     * @param pageQuery
-     * @return
-     */
-    List<BusLine> queryAll(BusLinePageQuery pageQuery);
+    List<User> queryAllByLimit(UserPageQuery pageQuery);
 
     /**
      * 统计总行数
@@ -48,45 +40,45 @@ public interface BusLineDao {
      *            查询条件
      * @return 总行数
      */
-    int count(BusLinePageQuery pageQuery);
+    int count(UserPageQuery pageQuery);
 
     /**
      * 新增数据
      *
-     * @param busLine
+     * @param user
      *            实例对象
      * @return 影响行数
      */
-    int insert(BusLine busLine);
+    int insert(User user);
 
     /**
      * 批量新增数据（MyBatis原生foreach方法）
      *
      * @param entities
-     *            List<BusLine> 实例对象列表
+     *            List<User> 实例对象列表
      * @return 影响行数
      */
-    int insertBatch(@Param("entities") List<BusLine> entities);
+    int insertBatch(@Param("entities") List<User> entities);
 
     /**
      * 批量新增或按主键更新数据（MyBatis原生foreach方法）
      *
      * @param entities
-     *            List<BusLine> 实例对象列表
+     *            List<User> 实例对象列表
      * @return 影响行数
      * @throws org.springframework.jdbc.BadSqlGrammarException
      *             入参是空List的时候会抛SQL语句错误的异常，请自行校验入参
      */
-    int insertOrUpdateBatch(@Param("entities") List<BusLine> entities);
+    int insertOrUpdateBatch(@Param("entities") List<User> entities);
 
     /**
      * 修改数据
      *
-     * @param busLine
+     * @param user
      *            实例对象
      * @return 影响行数
      */
-    int update(BusLine busLine);
+    int update(User user);
 
     /**
      * 通过主键删除数据

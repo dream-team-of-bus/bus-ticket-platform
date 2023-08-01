@@ -2,17 +2,17 @@ package com.bus.ticket.service;
 
 import java.util.List;
 
-import com.bus.ticket.entity.BusLine;
+import com.bus.ticket.entity.BusLineDriverUser;
 import com.bus.ticket.model.common.PageBean;
-import com.bus.ticket.model.query.BusLinePageQuery;
+import com.bus.ticket.model.query.BusLineDriverUserPageQuery;
 
 /**
- * 汽车线路(BusLine)表服务接口
+ * 线路关联的司机信息(BusLineDriverUser)表服务接口
  *
- * @author makejava
- * @since 2023-07-28 09:38:37
+ * @author honglixiang
+ * @since 2023-07-31 16:08:52
  */
-public interface BusLineService {
+public interface BusLineDriverUserService {
 
     /**
      * 通过ID查询单条数据
@@ -21,7 +21,7 @@ public interface BusLineService {
      *            主键
      * @return 实例对象
      */
-    BusLine queryById(Integer id);
+    BusLineDriverUser queryById(Integer id);
 
     /**
      * 分页查询
@@ -30,33 +30,33 @@ public interface BusLineService {
      *            筛选条件
      * @return 查询结果
      */
-    PageBean<BusLine> queryByPage(BusLinePageQuery pageQuery);
+    PageBean<BusLineDriverUser> queryByPage(BusLineDriverUserPageQuery pageQuery);
 
     /**
-     * 不分页查询
+     * 列表查询
      * 
      * @param pageQuery
      * @return
      */
-    List<BusLine> query(BusLinePageQuery pageQuery);
+    List<BusLineDriverUser> query(BusLineDriverUserPageQuery pageQuery);
 
     /**
      * 新增数据
      *
-     * @param busLine
+     * @param busLineDriverUser
      *            实例对象
      * @return 实例对象
      */
-    BusLine insert(BusLine busLine);
+    BusLineDriverUser insert(BusLineDriverUser busLineDriverUser);
 
     /**
      * 修改数据
      *
-     * @param busLine
+     * @param busLineDriverUser
      *            实例对象
      * @return 实例对象
      */
-    BusLine update(BusLine busLine);
+    BusLineDriverUser update(BusLineDriverUser busLineDriverUser);
 
     /**
      * 通过主键删除数据

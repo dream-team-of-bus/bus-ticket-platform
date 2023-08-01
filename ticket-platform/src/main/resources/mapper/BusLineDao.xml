@@ -31,6 +31,17 @@
         where id = #{id}
     </select>
 
+    <select id="queryAll" resultMap="BusLineMap" parameterType="com.bus.ticket.model.query.BusLinePageQuery">
+        select
+        id, departure, destination, departure_station, arrival_station, station_fare, platform_fare, platform_revenue,
+        creation_time, update_time
+        from bus_line
+        <include refid="where_query"/>
+        <if test="orderBy != null and orderType != null">
+            order by ${orderBy} ${orderType}
+        </if>
+    </select>
+
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="BusLineMap" parameterType="com.bus.ticket.model.query.BusLinePageQuery">
         select
