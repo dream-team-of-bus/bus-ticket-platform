@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import com.bus.ticket.dao.UserDao;
 import com.bus.ticket.entity.User;
@@ -85,5 +86,29 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean deleteById(Integer id) {
         return this.userDao.deleteById(id) > 0;
+    }
+
+    @Override
+    public User getByOpenId(String openId) {
+        Assert.notNull(openId, "openId is null");
+        UserPageQuery query = new UserPageQuery();
+        query.setWxOpenId(openId);
+        List<User> users = this.userDao.queryAllByLimit(query);
+        if (users.isEmpty()) {
+            return null;
+        }
+        return users.get(0);
+    }
+
+    @Override
+    public User getByMobile(String mobilePhone) {
+        Assert.notNull(mobilePhone, "mobilePhone is null");
+        UserPageQuery query = new UserPageQuery();
+        query.setPhone(mobilePhone);
+        List<User> users = this.userDao.queryAllByLimit(query);
+        if (users.isEmpty()) {
+            return null;
+        }
+        return users.get(0);
     }
 }

@@ -4,13 +4,14 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.springframework.stereotype.Service;
-
 import com.bus.ticket.dao.BusLineDao;
 import com.bus.ticket.entity.BusLine;
 import com.bus.ticket.model.common.PageBean;
 import com.bus.ticket.model.query.BusLinePageQuery;
 import com.bus.ticket.service.BusLineService;
+
+import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 /**
  * 汽车线路(BusLine)表服务实现类
@@ -63,6 +64,15 @@ public class BusLineServiceImpl implements BusLineService {
      */
     @Override
     public BusLine insert(BusLine busLine) {
+        Assert.notNull(busLine.getDeparture(), "Departure is null");
+        Assert.notNull(busLine.getDestination(), "Destination is null");
+        Assert.notNull(busLine.getDepartureStation(), "DepartureStation is null");
+        Assert.notNull(busLine.getArrivalStation(), "ArrivalStation is null");
+        Assert.notNull(busLine.getStationFare(), "StationFare is null");
+        Assert.notNull(busLine.getPlatformFare(), "PlatformFare is null");
+        Assert.notNull(busLine.getPlatformRevenue(), "PlatformRevenue is null");
+        Assert.isTrue(busLine.getPlatformFare() >= busLine.getStationFare(), "PlatformFare 不能大于 StationFare");
+        Assert.isTrue(busLine.getPlatformRevenue() >= busLine.getPlatformFare(), "PlatformRevenue 不能大于 PlatformFare ");
         this.busLineDao.insert(busLine);
         return busLine;
     }

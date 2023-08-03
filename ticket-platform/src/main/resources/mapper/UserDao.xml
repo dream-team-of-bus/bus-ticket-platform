@@ -45,8 +45,11 @@
 
     <sql id="where_query">
         <where>
-            <if test="id != null">
-                and id = #{id}
+            <if test="ids != null">
+                and id in
+                <foreach collection="ids" item="id" open="(" close=")" separator=",">
+                    #{id}
+                </foreach>
             </if>
             <if test="name != null and name != ''">
                 and name = #{name}
@@ -62,9 +65,6 @@
             </if>
             <if test="nickName != null and nickName != ''">
                 and nick_name = #{nickName}
-            </if>
-            <if test="headUrl != null and headUrl != ''">
-                and head_url = #{headUrl}
             </if>
             <if test="phone != null and phone != ''">
                 and phone = #{phone}
