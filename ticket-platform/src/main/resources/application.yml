@@ -10,7 +10,7 @@ spring:
     driverClassName: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://bus-llc.online:3306/ticket-platform?useUnicode=true&characterEncoding=utf8&useSSL=false&allowMultiQueries=true
     username: root
-    password: 123
+    password: hlx.abc.321.!@#
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
 
