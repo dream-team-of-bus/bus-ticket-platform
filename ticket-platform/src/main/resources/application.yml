@@ -8,7 +8,7 @@ spring:
     name: bus-ticket-platform-server
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://10.58.3.4:3306/ticket-platform?useUnicode=true&characterEncoding=utf8&useSSL=false&allowMultiQueries=true
+    url: jdbc:mysql://bus-llc.online:3306/ticket-platform?useUnicode=true&characterEncoding=utf8&useSSL=false&allowMultiQueries=true
     username: root
     password: 123
   jackson:
@@ -21,3 +21,11 @@ mybatis:
   mapper-locations: classpath:mapper/*xml
   #指定Mybatis的实体目录
   type-aliases-package: com.bus.ticket.entity
+
+wechat:
+  appid: ${WX_APPID:123456}
+  secret: ${WX_SECRET:123456}
+
+logging:
+  level:
+    org.springframework.security: debug
