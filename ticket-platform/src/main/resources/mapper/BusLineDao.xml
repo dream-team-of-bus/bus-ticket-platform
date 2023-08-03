@@ -72,15 +72,6 @@
             <if test="arrivalStation != null and arrivalStation != ''">
                 and arrival_station = #{arrivalStation}
             </if>
-            <if test="stationFare != null">
-                and station_fare = #{stationFare}
-            </if>
-            <if test="platformFare != null">
-                and platform_fare = #{platformFare}
-            </if>
-            <if test="platformRevenue != null">
-                and platform_revenue = #{platformRevenue}
-            </if>
             <if test="creationTime != null">
                 and creation_time = #{creationTime}
             </if>
