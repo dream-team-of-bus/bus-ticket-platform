@@ -21,13 +21,13 @@ import com.bus.ticket.entity.BusLineDriverUser;
 import com.bus.ticket.entity.User;
 import com.bus.ticket.model.BusLineBaseVo;
 import com.bus.ticket.model.UserBaseVo;
-import com.bus.ticket.model.common.PageBean;
 import com.bus.ticket.model.query.BusLineDriverUserPageQuery;
 import com.bus.ticket.model.query.BusLinePageQuery;
 import com.bus.ticket.model.query.UserPageQuery;
 import com.bus.ticket.service.BusLineDriverUserService;
 import com.bus.ticket.service.BusLineService;
 import com.bus.ticket.service.UserService;
+import com.bus.ticket.util.PageUtils;
 import com.bus.ticket.util.StreamUtils;
 
 import io.swagger.annotations.Api;
@@ -64,27 +64,24 @@ public class BusLineController {
         queryByPage(@ApiParam(value = "分页查询参数", required = true) @RequestBody BusLinePageQuery pageQuery) {
         Page<BusLine> page = this.busLineService.page(pageQuery.toPage(), pageQuery.toWrapper());
         List<BusLineBaseVo> vos = StreamUtils.toList(page.getRecords(), v -> BusLineBaseVo.convert(v));
-        Page<BusLineBaseVo> objectPage = new Page<>(page.getCurrent(), page.getSize(), page.getTotal());
-        objectPage.setRecords(vos);
-        return objectPage;
+        return PageUtils.convert(page, vos);
     }
 
     @ApiOperation(value = "汽车线路司机分页查询", notes = "汽车线路司机分页查询")
     @PostMapping("busLine/{id}/driver")
-    public PageBean<UserBaseVo> pageQueryDrivers(
-        @ApiParam(value = "主键ID", required = true) @PathVariable("id") Integer id,
+    public Page<UserBaseVo> pageQueryDrivers(@ApiParam(value = "主键ID", required = true) @PathVariable("id") Integer id,
         @ApiParam(value = "分页查询参数", required = true) @RequestBody UserPageQuery userPageQuery) {
         BusLineDriverUserPageQuery driverUserPageQuery = new BusLineDriverUserPageQuery();
         driverUserPageQuery.setBusLineId(id);
         List<BusLineDriverUser> driverUsers = driverUserService.query(driverUserPageQuery);
         if (CollectionUtils.isEmpty(driverUsers)) {
-            return new PageBean<>();
+            return new Page<>();
         }
         Set<Integer> userIds = StreamUtils.toSet(driverUsers, BusLineDriverUser::getUserId);
         userPageQuery.setIds(new ArrayList<>(userIds));
-        PageBean<User> userPageBean = userService.queryByPage(userPageQuery);
-        List<UserBaseVo> vos = StreamUtils.toList(userPageBean.getPageDatas(), v -> UserBaseVo.convert(v));
-        return new PageBean<>(userPageBean, vos, userPageBean.getTotalPages());
+        Page<User> userPage = userService.page(userPageQuery.toPage(), userPageQuery.toWrapper());
+        List<UserBaseVo> vos = StreamUtils.toList(userPage.getRecords(), v -> UserBaseVo.convert(v));
+        return PageUtils.convert(userPage, vos);
     }
 
     @ApiOperation(value = "汽车线路查询", notes = "汽车线路查询")

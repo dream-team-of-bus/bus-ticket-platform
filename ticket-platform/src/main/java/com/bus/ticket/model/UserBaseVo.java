@@ -44,7 +44,9 @@ public class UserBaseVo {
         user.setName(name);
         user.setNickName(nickName);
         user.setPhone(phone);
-        user.setType(type.intValue());
+        if (type != null) {
+            user.setType(type.intValue());
+        }
         return user;
     }
 }
