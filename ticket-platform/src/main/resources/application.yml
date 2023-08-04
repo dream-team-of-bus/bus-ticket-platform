@@ -28,4 +28,4 @@ wechat:
 
 logging:
   level:
-    org.springframework.security: debug
+    com.bus.ticket.dao: debug
