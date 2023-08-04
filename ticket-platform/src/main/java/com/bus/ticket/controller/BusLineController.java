@@ -73,7 +73,7 @@ public class BusLineController {
         @ApiParam(value = "分页查询参数", required = true) @RequestBody UserPageQuery userPageQuery) {
         BusLineDriverUserPageQuery driverUserPageQuery = new BusLineDriverUserPageQuery();
         driverUserPageQuery.setBusLineId(id);
-        List<BusLineDriverUser> driverUsers = driverUserService.query(driverUserPageQuery);
+        List<BusLineDriverUser> driverUsers = driverUserService.list(driverUserPageQuery.toWrapper());
         if (CollectionUtils.isEmpty(driverUsers)) {
             return new Page<>();
         }

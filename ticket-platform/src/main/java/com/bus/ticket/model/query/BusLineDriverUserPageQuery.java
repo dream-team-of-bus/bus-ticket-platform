@@ -1,7 +1,11 @@
 package com.bus.ticket.model.query;
 
 import java.util.Date;
+import java.util.List;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.bus.ticket.entity.BusLineDriverUser;
 import com.bus.ticket.model.common.PageInfo;
 
 import io.swagger.annotations.ApiModel;
@@ -18,7 +22,7 @@ import lombok.Data;
 @Data
 public class BusLineDriverUserPageQuery extends PageInfo {
 
-    private Integer id;
+    private List<Integer> ids;
 
     @ApiModelProperty(value = "用户ID")
     private Integer userId;
@@ -27,4 +31,18 @@ public class BusLineDriverUserPageQuery extends PageInfo {
     private Integer busLineId;
 
     private Date creationTime;
+
+    public LambdaQueryWrapper<BusLineDriverUser> toWrapper() {
+        LambdaQueryWrapper<BusLineDriverUser> wrapper = Wrappers.lambdaQuery();
+        if (ids != null) {
+            wrapper.in(BusLineDriverUser::getId, ids);
+        }
+        if (userId != null) {
+            wrapper.eq(BusLineDriverUser::getUserId, userId);
+        }
+        if (busLineId != null) {
+            wrapper.eq(BusLineDriverUser::getBusLineId, busLineId);
+        }
+        return wrapper;
+    }
 }
