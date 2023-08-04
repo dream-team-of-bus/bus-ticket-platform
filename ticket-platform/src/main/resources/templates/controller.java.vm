@@ -1,0 +1,78 @@
+package ${package.Controller};
+
+import javax.annotation.Resource;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+#if(${restControllerStyle})
+import org.springframework.web.bind.annotation.RestController;
+#else
+import org.springframework.stereotype.Controller;
+#end
+#if(${superControllerClassPackage})
+import ${superControllerClassPackage};
+#end
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.bus.ticket.entity.$!{table.entityName};
+import com.bus.ticket.service.$!{table.entityName}Service;
+
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+/**
+ * <p>
+ * $!{table.comment} 前端控制器
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Api(tags = "$!{table.comment}管理")
+#if(${restControllerStyle})
+@RestController
+#else
+@Controller
+#end
+#if(${kotlin})
+class ${table.controllerName}#if(${superControllerClass}) : ${superControllerClass}()#end
+#else
+#if(${superControllerClass})
+public class ${table.controllerName} extends ${superControllerClass} {
+#else
+public class ${table.controllerName} {
+#end
+
+    @Resource
+    private $!{table.entityName}Service orderRecordService;
+
+    @ApiOperation(value = "$!{table.comment}信息分页查询" , notes = "$!{table.comment}信息分页查询" )
+    @PostMapping("${table.entityPath}/pageQuery" )
+    public Page<$!{table.entityName}>
+            queryByPage(@ApiParam(value = "分页查询参数" , required = true) @RequestBody $!{table.entityName}PageQuery pageQuery){
+        return orderRecordService.page(pageQuery.toPage(),pageQuery.toWrapper());
+    }
+
+    @ApiOperation(value = "获取$!{table.comment}信息详情" , notes = "根据ID获取$!{table.comment}信息详细信息" )
+    @GetMapping("${table.entityPath}/{id}" )
+    public $!{table.entityName} queryById(@ApiParam(value = "主键ID" , required = true) @PathVariable("id" ) Integer id){
+        return this.orderRecordService.getById(id);
+    }
+
+    @ApiOperation(value = "添加$!{table.comment}信息" , notes = "添加$!{table.comment}信息记录" )
+    @PostMapping("${table.entityPath}" )
+    public void add(@ApiParam(value = "$!{table.comment}信息信息" , required = true) @RequestBody $!{table.entityName} entity){
+        this.orderRecordService.save(entity);
+    }
+
+    @ApiOperation(value = "修改$!{table.comment}信息" , notes = "根据ID修改$!{table.comment}信息信息" )
+    @PutMapping("${table.entityPath}/{id}" )
+    public void edit(@ApiParam(value = "主键ID" , required = true) @PathVariable("id" ) Integer id,
+    @ApiParam(value = "$!{table.comment}信息信息" , required = true) @RequestBody $!{table.entityName} entity){
+        entity.setId(id);
+        this.orderRecordService.updateById(entity);
+    }
+}
+#end
