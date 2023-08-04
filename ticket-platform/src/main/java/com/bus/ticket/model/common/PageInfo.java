@@ -1,5 +1,7 @@
 package com.bus.ticket.model.common;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -229,5 +231,9 @@ public class PageInfo implements java.io.Serializable {
 
     public void setOrderType(String orderType) {
         this.orderType = orderType;
+    }
+
+    public Page toPage() {
+        return new Page(pageIndex, pageSize);
     }
 }
