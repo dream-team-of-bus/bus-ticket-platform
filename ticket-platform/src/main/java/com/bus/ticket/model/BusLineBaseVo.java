@@ -44,4 +44,15 @@ public class BusLineBaseVo {
         BeanUtils.copyProperties(line, vo);
         return vo;
     }
+
+    public BusLine to() {
+        BusLine line = new BusLine();
+        line.setDeparture(departure);
+        line.setDestination(destination);
+        line.setDepartureStation(departureStation);
+        line.setArrivalStation(arrivalStation);
+        line.setStationFare(stationFare);
+        line.setPlatformFare(platformFare);
+        return line;
+    }
 }

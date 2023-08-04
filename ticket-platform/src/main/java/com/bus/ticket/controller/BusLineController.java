@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bus.ticket.entity.BusLine;
 import com.bus.ticket.entity.BusLineDriverUser;
 import com.bus.ticket.entity.User;
@@ -52,18 +53,20 @@ public class BusLineController {
 
     @ApiOperation(value = "汽车线路分页查询", notes = "汽车线路分页查询")
     @PostMapping("busLine/pageQuery/admin")
-    public PageBean<BusLine>
+    public Page<BusLine>
         queryByPageAdmin(@ApiParam(value = "分页查询参数", required = true) @RequestBody BusLinePageQuery pageQuery) {
-        return this.busLineService.queryByPage(pageQuery);
+        return this.busLineService.page(pageQuery.toPage(), pageQuery.toWrapper());
     }
 
     @ApiOperation(value = "汽车线路分页查询", notes = "汽车线路分页查询")
     @PostMapping("busLine/pageQuery")
-    public PageBean<BusLineBaseVo>
+    public Page<BusLineBaseVo>
         queryByPage(@ApiParam(value = "分页查询参数", required = true) @RequestBody BusLinePageQuery pageQuery) {
-        PageBean<BusLine> pageBean = this.busLineService.queryByPage(pageQuery);
-        List<BusLineBaseVo> vos = StreamUtils.toList(pageBean.getPageDatas(), v -> BusLineBaseVo.convert(v));
-        return new PageBean<>(pageBean, vos, pageBean.getTotalPages());
+        Page<BusLine> page = this.busLineService.page(pageQuery.toPage(), pageQuery.toWrapper());
+        List<BusLineBaseVo> vos = StreamUtils.toList(page.getRecords(), v -> BusLineBaseVo.convert(v));
+        Page<BusLineBaseVo> objectPage = new Page<>(page.getCurrent(), page.getSize(), page.getTotal());
+        objectPage.setRecords(vos);
+        return objectPage;
     }
 
     @ApiOperation(value = "汽车线路司机分页查询", notes = "汽车线路司机分页查询")
@@ -88,34 +91,33 @@ public class BusLineController {
     @PostMapping("busLine/list")
     public List<BusLineBaseVo>
         query(@ApiParam(value = "分页查询参数", required = true) @RequestBody BusLinePageQuery pageQuery) {
-        List<BusLine> list = this.busLineService.query(pageQuery);
+        List<BusLine> list = this.busLineService.list(pageQuery.toWrapper());
         return StreamUtils.toList(list, v -> BusLineBaseVo.convert(v));
     }
 
     @ApiOperation(value = "获取汽车线路详情", notes = "根据ID获取汽车线路详细信息")
     @GetMapping("busLine/{id}")
     public BusLine queryById(@ApiParam(value = "主键ID", required = true) @PathVariable("id") Integer id) {
-        return this.busLineService.queryById(id);
+        return this.busLineService.getById(id);
     }
 
     @ApiOperation(value = "添加汽车线路", notes = "添加汽车线路记录")
     @PostMapping("busLine")
-    public BusLine add(@ApiParam(value = "汽车线路信息", required = true) @RequestBody BusLine busLine) {
-        return this.busLineService.insert(busLine);
+    public void add(@ApiParam(value = "汽车线路信息", required = true) @RequestBody BusLineBaseVo busLine) {
+        this.busLineService.save(busLine.to());
     }
 
     @ApiOperation(value = "修改汽车线路基本信息", notes = "根据ID修改汽车线路基本信息")
     @PutMapping("busLine/{id}/basic")
-    public BusLineBaseVo editBasic(@ApiParam(value = "主键ID", required = true) @PathVariable("id") Integer id,
-        @ApiParam(value = "汽车线路信息", required = true) @RequestBody BusLine busLine) {
+    public void editBasic(@ApiParam(value = "主键ID", required = true) @PathVariable("id") Integer id,
+        @ApiParam(value = "汽车线路信息", required = true) @RequestBody BusLineBaseVo busLine) {
         busLine.setId(id);
-        BusLine line = this.busLineService.update(busLine);
-        return BusLineBaseVo.convert(line);
+        this.busLineService.updateById(busLine.to());
     }
 
     @ApiOperation(value = "修改汽车线路平台设置信息", notes = "根据ID修改汽车线路平台设置信息")
     @PutMapping("busLine/{id}")
-    public BusLine edit(@ApiParam(value = "主键ID", required = true) @PathVariable("id") Integer id,
+    public void edit(@ApiParam(value = "主键ID", required = true) @PathVariable("id") Integer id,
         @ApiParam(value = "汽车线路信息", required = true) @RequestBody BusLine busLine) {
         Assert.notNull(busLine.getStationFare(), "StationFare is null");
         Assert.notNull(busLine.getPlatformFare(), "PlatformFare is null");
@@ -123,6 +125,6 @@ public class BusLineController {
         Assert.isTrue(busLine.getPlatformFare() >= busLine.getStationFare(), "PlatformFare 不能大于 StationFare");
         Assert.isTrue(busLine.getPlatformRevenue() >= busLine.getPlatformFare(), "PlatformRevenue 不能大于 PlatformFare ");
         busLine.setId(id);
-        return this.busLineService.update(busLine);
+        this.busLineService.updateById(busLine);
     }
 }
