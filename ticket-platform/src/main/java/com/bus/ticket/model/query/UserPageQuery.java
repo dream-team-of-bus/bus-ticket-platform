@@ -1,8 +1,10 @@
 package com.bus.ticket.model.query;
 
-import java.util.Date;
 import java.util.List;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.bus.ticket.entity.User;
 import com.bus.ticket.model.common.PageInfo;
 
 import io.swagger.annotations.ApiModel;
@@ -38,7 +40,29 @@ public class UserPageQuery extends PageInfo {
     @ApiModelProperty(value = "手机号")
     private String phone;
 
-    private Date creationTime;
-
-    private Date updateTime;
+    public LambdaQueryWrapper<User> toWrapper() {
+        LambdaQueryWrapper<User> wrapper = Wrappers.lambdaQuery();
+        if (ids != null) {
+            wrapper.in(User::getId, ids);
+        }
+        if (name != null) {
+            wrapper.like(User::getName, name);
+        }
+        if (nickName != null) {
+            wrapper.like(User::getNickName, nickName);
+        }
+        if (type != null) {
+            wrapper.eq(User::getType, type);
+        }
+        if (wxOpenId != null) {
+            wrapper.eq(User::getWxOpenId, wxOpenId);
+        }
+        if (wxUnionId != null) {
+            wrapper.eq(User::getWxUnionId, wxUnionId);
+        }
+        if (phone != null) {
+            wrapper.eq(User::getPhone, phone);
+        }
+        return wrapper;
+    }
 }

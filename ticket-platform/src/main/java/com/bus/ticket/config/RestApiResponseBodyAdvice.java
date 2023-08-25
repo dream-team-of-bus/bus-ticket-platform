@@ -27,7 +27,8 @@ import lombok.extern.slf4j.Slf4j;
 @RestControllerAdvice
 public class RestApiResponseBodyAdvice implements ResponseBodyAdvice<Object> {
 
-    private String[] supportReturnTypeClassNamePrefixes = {"com.bus.ticket", "java.lang", "java.util", "void"};
+    private String[] supportReturnTypeClassNamePrefixes = {"com.bus.ticket", "java.lang", "java.util", "void",
+        "com.baomidou.mybatisplus.extension.plugins.pagination.Page"};
 
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {

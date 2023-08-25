@@ -30,14 +30,14 @@ public class BusLineDriverUserController {
 
     @ApiOperation(value = "添加线路关联的司机信息", notes = "添加线路关联的司机信息记录")
     @PostMapping("busLineDriverUser")
-    public BusLineDriverUser
+    public void
         add(@ApiParam(value = "线路关联的司机信息信息", required = true) @RequestBody BusLineDriverUser busLineDriverUser) {
-        return this.busLineDriverUserService.insert(busLineDriverUser);
+        this.busLineDriverUserService.save(busLineDriverUser);
     }
 
     @ApiOperation(value = "删除线路关联的司机信息", notes = "根据ID删除线路关联的司机信息记录")
     @DeleteMapping("busLineDriverUser/{id}")
     public Boolean deleteById(@ApiParam(value = "主键ID", required = true) @PathVariable("id") Integer id) {
-        return this.busLineDriverUserService.deleteById(id);
+        return this.busLineDriverUserService.removeById(id);
     }
 }

@@ -18,6 +18,8 @@ public class UserBaseVo {
 
     private Integer id;
 
+    private Byte type;
+
     @ApiModelProperty(value = "真实名称")
     private String name;
 
@@ -42,6 +44,9 @@ public class UserBaseVo {
         user.setName(name);
         user.setNickName(nickName);
         user.setPhone(phone);
+        if (type != null) {
+            user.setType(type.intValue());
+        }
         return user;
     }
 }
