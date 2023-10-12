@@ -6,19 +6,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
+import com.baomidou.mybatisplus.annotation.DbType;
+import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.bus.ticket.config.wx.WechatConfigProperties;
 
 /**
  * @author honglixiang
  */
 @EnableConfigurationProperties(value = {WechatConfigProperties.class})
-import com.baomidou.mybatisplus.annotation.DbType;
-import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
-import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
-
-/**
- * @author honglixiang
- */
 @MapperScan("com.bus.ticket.dao")
 @SpringBootApplication
 public class TicketPlatformApplication {
