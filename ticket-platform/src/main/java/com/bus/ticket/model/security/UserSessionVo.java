@@ -15,5 +15,11 @@ public class UserSessionVo extends UserBaseVo {
 
     private String sessionId;
 
+    private String sessionKey;
+
+    private String openId;
+
+    private String unionId;
+
     private List<String> permissions;
 }
