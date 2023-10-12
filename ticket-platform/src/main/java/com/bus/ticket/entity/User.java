@@ -39,11 +39,17 @@ public class User implements Serializable {
     @ApiModelProperty(value = "昵称")
     private String nickName;
 
+    @ApiModelProperty(value = "性别")
+    private Integer gender;
+
     @ApiModelProperty(value = "头像路径")
     private String headUrl;
 
     @ApiModelProperty(value = "手机号")
     private String phone;
+
+    @ApiModelProperty(value = "上一次登录的时间")
+    private Date lastLoginTime;
 
     private Date creationTime;
 

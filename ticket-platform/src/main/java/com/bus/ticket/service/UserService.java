@@ -11,4 +11,19 @@ import com.bus.ticket.entity.User;
  */
 public interface UserService extends IService<User> {
 
+    /**
+     * 根据电话号码查用户
+     * 
+     * @param phone
+     * @return
+     */
+    User getByMobile(String phone);
+
+    /**
+     * 根据微信OpenID查询用户
+     * 
+     * @param openId
+     * @return
+     */
+    User getByOpenId(String openId);
 }

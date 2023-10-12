@@ -12,7 +12,7 @@ import lombok.experimental.Accessors;
 /**
  * 通用的API响应模型。
  * 
- * @author wuzheng@tiduyun.com
+ * @author honglixiang
  */
 @Data
 @ToString
@@ -21,12 +21,21 @@ public class CommonApiResponse implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 响应码 0：代表没问题，其他代表错误
+     */
     @JsonProperty("code")
     private String code;
 
+    /**
+     * 响应码不为0时的错误信息
+     */
     @JsonProperty("message")
     private String message;
 
+    /**
+     * 响应码为0时返回的数据
+     */
     @JsonProperty("data")
     private Object data;
 
