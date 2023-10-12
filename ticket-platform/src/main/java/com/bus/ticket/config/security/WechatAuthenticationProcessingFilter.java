@@ -63,8 +63,7 @@ public class WechatAuthenticationProcessingFilter extends AbstractAuthentication
         WechatLoginResponse loginResponse = wechatLogin(code);
 
         // 创建未认证token
-        WechatAuthenticationToken authRequest =
-            new WechatAuthenticationToken(loginResponse.getOpenId(), loginResponse.getUnionId());
+        WechatAuthenticationToken authRequest = new WechatAuthenticationToken(loginResponse, null);
         // 验证token
         authRequest.setDetails(this.authenticationDetailsSource.buildDetails(request));
         return this.getAuthenticationManager().authenticate(authRequest);
@@ -80,9 +79,9 @@ public class WechatAuthenticationProcessingFilter extends AbstractAuthentication
         params.put("secret", wechatConfigProperties.getSecret());
         params.put("grant_type", "authorization_code");
         params.put("js_code", code);
-
+        log.info("wechatLogin request : {}", params);
         String response = HttpUtil.get(LOGIN_URL, params);
-        log.info("{}", response);
+        log.info("wechatLogin response  : {}", response);
         WechatLoginResponse responseObj = JSONUtils.parse(response, WechatLoginResponse.class);
         return Optional.of(responseObj).filter(obj -> obj.getErrCode() == null)
             .orElseThrow(() -> new AuthenticationServiceException("微信登录异常"));

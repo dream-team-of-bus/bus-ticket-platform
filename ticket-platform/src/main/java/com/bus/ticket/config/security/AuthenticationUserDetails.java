@@ -7,13 +7,22 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.bus.ticket.entity.User;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * @author honglixiang@tiduyun.com
  * @date 2023/8/1
  */
 public class AuthenticationUserDetails implements UserDetails {
 
+    @Setter
+    @Getter
     private User user;
+
+    @Setter
+    @Getter
+    private String sessionKey;
 
     public AuthenticationUserDetails() {
         super();

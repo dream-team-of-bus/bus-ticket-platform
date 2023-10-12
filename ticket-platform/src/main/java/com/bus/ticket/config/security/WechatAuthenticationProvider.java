@@ -8,7 +8,9 @@ import org.springframework.security.core.AuthenticationException;
 
 import com.bus.ticket.constant.UserTypeEnum;
 import com.bus.ticket.entity.User;
+import com.bus.ticket.model.wx.WechatLoginResponse;
 import com.bus.ticket.service.UserService;
+import com.bus.ticket.util.JSONUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,21 +32,26 @@ public class WechatAuthenticationProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         log.info("{}", authentication);
+        WechatLoginResponse principal = (WechatLoginResponse)authentication.getPrincipal();
+        log.info("{}", JSONUtils.toJSONStringIgnoreErrors(principal));
         // 获取openId
-        String openId = authentication.getName();
+        String openId = principal.getOpenId();
+        log.info("openId : {}", openId);
         // 根据openId查询用户
         User user = userService.getByOpenId(openId);
+        log.info("user : {}", JSONUtils.toJSONStringIgnoreErrors(user));
         // 用户存在则获取，不存在则注册
         if (user == null) {
             user = new User();
             user.setWxOpenId(openId);
-            // user.setName();
+            user.setName("default");
             // user.setNickName();
             // user.setPhone();
             user.setType((int)UserTypeEnum.PASSENGER.getType());
-            userService.insert(user);
+            userService.save(user);
         }
         AuthenticationUserDetails userDetails = new AuthenticationUserDetails(user);
+        userDetails.setSessionKey(principal.getSessionKey());
         WechatAuthenticationToken authenticationToken = new WechatAuthenticationToken(userDetails, null, null);
         authenticationToken.setDetails(authentication.getDetails());
         return authenticationToken;
