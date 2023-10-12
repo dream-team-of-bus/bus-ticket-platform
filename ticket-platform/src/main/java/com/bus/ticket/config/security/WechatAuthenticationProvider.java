@@ -1,5 +1,7 @@
 package com.bus.ticket.config.security;
 
+import java.util.Date;
+
 import javax.annotation.Resource;
 
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -8,7 +10,7 @@ import org.springframework.security.core.AuthenticationException;
 
 import com.bus.ticket.constant.UserTypeEnum;
 import com.bus.ticket.entity.User;
-import com.bus.ticket.model.wx.WechatLoginResponse;
+import com.bus.ticket.model.wx.WxLoginUserContext;
 import com.bus.ticket.service.UserService;
 import com.bus.ticket.util.JSONUtils;
 
@@ -31,12 +33,10 @@ public class WechatAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        log.info("{}", authentication);
-        WechatLoginResponse principal = (WechatLoginResponse)authentication.getPrincipal();
+        WxLoginUserContext principal = (WxLoginUserContext)authentication.getPrincipal();
         log.info("{}", JSONUtils.toJSONStringIgnoreErrors(principal));
         // 获取openId
         String openId = principal.getOpenId();
-        log.info("openId : {}", openId);
         // 根据openId查询用户
         User user = userService.getByOpenId(openId);
         log.info("user : {}", JSONUtils.toJSONStringIgnoreErrors(user));
@@ -44,11 +44,26 @@ public class WechatAuthenticationProvider implements AuthenticationProvider {
         if (user == null) {
             user = new User();
             user.setWxOpenId(openId);
-            user.setName("default");
-            // user.setNickName();
-            // user.setPhone();
+            user.setName(principal.getUserInfo().getNickName());
+            user.setNickName(principal.getUserInfo().getNickName());
+            user.setGender(principal.getUserInfo().getGender());
+            user.setHeadUrl(principal.getUserInfo().getAvatarUrl());
             user.setType((int)UserTypeEnum.PASSENGER.getType());
             userService.save(user);
+        } else {
+            /**
+             * 修改用户登录时间
+             */
+            user.setNickName(principal.getUserInfo().getNickName());
+            user.setGender(principal.getUserInfo().getGender());
+            user.setHeadUrl(principal.getUserInfo().getAvatarUrl());
+
+            User updater = new User();
+            updater.setId(user.getId());
+            updater.setNickName(user.getNickName());
+            updater.setHeadUrl(user.getHeadUrl());
+            updater.setLastLoginTime(new Date());
+            userService.updateById(updater);
         }
         AuthenticationUserDetails userDetails = new AuthenticationUserDetails(user);
         userDetails.setSessionKey(principal.getSessionKey());

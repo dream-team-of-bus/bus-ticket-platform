@@ -18,7 +18,9 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.bus.ticket.config.wx.WechatConfigProperties;
+import com.bus.ticket.constant.WxGetUserInfoKey;
 import com.bus.ticket.model.wx.WechatLoginResponse;
+import com.bus.ticket.model.wx.WxLoginUserContext;
 import com.bus.ticket.util.JSONUtils;
 
 import cn.hutool.http.HttpUtil;
@@ -54,6 +56,15 @@ public class WechatAuthenticationProcessingFilter extends AbstractAuthentication
             throw new AuthenticationServiceException("Authentication method not supported: " + request.getMethod());
         }
 
+        String iv = request.getParameter(WxGetUserInfoKey.IV);
+        String rawData = request.getParameter(WxGetUserInfoKey.RAW_DATA);
+        String signature = request.getParameter(WxGetUserInfoKey.SIGNATURE);
+        String encryptedData = request.getParameter(WxGetUserInfoKey.ENCRYPTED_DATA);
+        log.info("iv : {}", iv);
+        log.info("RAW_DATA : {}", rawData);
+        log.info("SIGNATURE : {}", signature);
+        log.info("ENCRYPTED_DATA : {}", encryptedData);
+
         // 校验code
         String code = request.getParameter(LOGIN_CODE_PARAMETER);
         if (code == null) {
@@ -62,8 +73,18 @@ public class WechatAuthenticationProcessingFilter extends AbstractAuthentication
         // 发送登录请求
         WechatLoginResponse loginResponse = wechatLogin(code);
 
+        WxLoginUserContext userContext = new WxLoginUserContext();
+        userContext.setIv(iv);
+        userContext.setRawData(rawData);
+        userContext.setUserInfo(JSONUtils.parseIgnoreErrors(rawData, WxLoginUserContext.UserInfo.class));
+        userContext.setSignature(signature);
+        userContext.setEncryptedData(encryptedData);
+        userContext.setOpenId(loginResponse.getOpenId());
+        userContext.setSessionKey(loginResponse.getSessionKey());
+        userContext.setUnionId(loginResponse.getUnionId());
+
         // 创建未认证token
-        WechatAuthenticationToken authRequest = new WechatAuthenticationToken(loginResponse, null);
+        WechatAuthenticationToken authRequest = new WechatAuthenticationToken(userContext, null);
         // 验证token
         authRequest.setDetails(this.authenticationDetailsSource.buildDetails(request));
         return this.getAuthenticationManager().authenticate(authRequest);

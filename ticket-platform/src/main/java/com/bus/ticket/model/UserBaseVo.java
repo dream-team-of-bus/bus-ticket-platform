@@ -1,5 +1,7 @@
 package com.bus.ticket.model;
 
+import java.util.Date;
+
 import org.springframework.beans.BeanUtils;
 
 import com.bus.ticket.entity.User;
@@ -28,6 +30,12 @@ public class UserBaseVo {
 
     @ApiModelProperty(value = "手机号")
     private String phone;
+
+    private Integer gender;
+
+    private String headUrl;
+
+    private Date lastLoginTime;
 
     public static UserBaseVo convert(User user) {
         if (user == null) {
