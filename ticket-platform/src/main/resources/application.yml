@@ -23,8 +23,8 @@ mybatis:
   type-aliases-package: com.bus.ticket.entity
 
 wechat:
-  appid: ${WX_APPID:123456}
-  secret: ${WX_SECRET:123456}
+  appid: ${WX_APPID:wx667164dd9e377ed6}
+  secret: ${WX_SECRET:88b6b688853b5684512b6003ca950b3d}
 
 logging:
   level:
