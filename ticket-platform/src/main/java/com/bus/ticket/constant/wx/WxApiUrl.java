@@ -1,4 +1,4 @@
-package com.bus.ticket.constant;
+package com.bus.ticket.constant.wx;
 
 /**
  * @author honglixiang@tiduyun.com

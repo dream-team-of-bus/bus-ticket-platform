@@ -8,7 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.stereotype.Service;
 
-import com.bus.ticket.constant.WxApiUrl;
+import com.bus.ticket.constant.wx.WxApiUrl;
 import com.bus.ticket.model.wx.CheckSessionKeyResponse;
 import com.bus.ticket.model.wx.GetAccessTokenResponse;
 import com.bus.ticket.model.wx.GetPhoneResponse;

@@ -10,7 +10,7 @@ import org.springframework.security.core.AuthenticationException;
 
 import com.bus.ticket.constant.UserTypeEnum;
 import com.bus.ticket.entity.User;
-import com.bus.ticket.model.wx.WxLoginUserContext;
+import com.bus.ticket.model.wx.UserLoginContext;
 import com.bus.ticket.service.UserService;
 import com.bus.ticket.util.JSONUtils;
 
@@ -33,7 +33,7 @@ public class WechatAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        WxLoginUserContext principal = (WxLoginUserContext)authentication.getPrincipal();
+        UserLoginContext principal = (UserLoginContext)authentication.getPrincipal();
         log.info("{}", JSONUtils.toJSONStringIgnoreErrors(principal));
         // 获取openId
         String openId = principal.getOpenId();

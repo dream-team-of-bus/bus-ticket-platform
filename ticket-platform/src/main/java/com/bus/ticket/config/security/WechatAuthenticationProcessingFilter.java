@@ -18,9 +18,9 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.bus.ticket.config.wx.WechatConfigProperties;
-import com.bus.ticket.constant.WxGetUserInfoKey;
+import com.bus.ticket.constant.wx.WxGetUserInfoKey;
+import com.bus.ticket.model.wx.UserLoginContext;
 import com.bus.ticket.model.wx.WechatLoginResponse;
-import com.bus.ticket.model.wx.WxLoginUserContext;
 import com.bus.ticket.util.JSONUtils;
 
 import cn.hutool.http.HttpUtil;
@@ -73,10 +73,10 @@ public class WechatAuthenticationProcessingFilter extends AbstractAuthentication
         // 发送登录请求
         WechatLoginResponse loginResponse = wechatLogin(code);
 
-        WxLoginUserContext userContext = new WxLoginUserContext();
+        UserLoginContext userContext = new UserLoginContext();
         userContext.setIv(iv);
         userContext.setRawData(rawData);
-        userContext.setUserInfo(JSONUtils.parseIgnoreErrors(rawData, WxLoginUserContext.UserInfo.class));
+        userContext.setUserInfo(JSONUtils.parseIgnoreErrors(rawData, UserLoginContext.UserInfo.class));
         userContext.setSignature(signature);
         userContext.setEncryptedData(encryptedData);
         userContext.setOpenId(loginResponse.getOpenId());
