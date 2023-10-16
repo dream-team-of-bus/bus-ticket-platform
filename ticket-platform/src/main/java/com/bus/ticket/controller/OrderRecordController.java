@@ -71,7 +71,7 @@ public class OrderRecordController {
         order.setDepartureTime(orderRecord.getDepartureTime());
         order.setCreatorUserId(user.getId());
         order.setStatus(OrderRecordStatus.WAITING_PAYMENT.getCode());
-        this.orderRecordService.save(orderRecord);
+        this.orderRecordService.save(order);
     }
 
     @ApiOperation(value = "订单支付", notes = "订单支付")
