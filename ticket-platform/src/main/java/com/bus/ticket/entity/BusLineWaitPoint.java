@@ -1,8 +1,10 @@
 package com.bus.ticket.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
+
+import com.baomidou.mybatisplus.annotation.TableName;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -38,9 +40,8 @@ public class BusLineWaitPoint implements Serializable {
     @ApiModelProperty("纬度")
     private String latitude;
 
-    private LocalDateTime creationTime;
+    private Date creationTime;
 
-    private LocalDateTime updateTime;
-
+    private Date updateTime;
 
 }

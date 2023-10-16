@@ -2,6 +2,7 @@ package com.bus.ticket.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -65,11 +66,11 @@ public class OrderRecord implements Serializable {
     private Integer driverUserId;
 
     @ApiModelProperty("订单确认时间")
-    private LocalDateTime driverConfirmTime;
+    private Date driverConfirmTime;
 
     private Integer creatorUserId;
 
-    private LocalDateTime creationTime;
+    private Date creationTime;
 
-    private LocalDateTime updateTime;
+    private Date updateTime;
 }
