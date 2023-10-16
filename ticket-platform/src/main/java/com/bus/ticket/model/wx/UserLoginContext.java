@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
  * @date 2023/10/12
  */
 @Data
-public class WxLoginUserContext {
+public class UserLoginContext {
 
     private String sessionKey;
 
