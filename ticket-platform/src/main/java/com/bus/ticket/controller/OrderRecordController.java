@@ -1,6 +1,7 @@
 package com.bus.ticket.controller;
 
 import javax.annotation.Resource;
+import javax.websocket.server.PathParam;
 
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,7 @@ import com.bus.ticket.entity.BusLine;
 import com.bus.ticket.entity.OrderRecord;
 import com.bus.ticket.entity.User;
 import com.bus.ticket.model.query.OrderRecordPageQuery;
+import com.bus.ticket.service.BizOrderService;
 import com.bus.ticket.service.BusLineService;
 import com.bus.ticket.service.OrderRecordService;
 import com.bus.ticket.util.AuthenticationUtils;
@@ -39,6 +41,8 @@ public class OrderRecordController {
     private OrderRecordService orderRecordService;
     @Resource
     private BusLineService busLineService;
+    @Resource
+    private BizOrderService bizOrderService;
 
     @ApiOperation(value = "订单信息分页查询", notes = "订单信息分页查询")
     @PostMapping("orderRecord/pageQuery")
@@ -90,37 +94,28 @@ public class OrderRecordController {
 
     @ApiOperation(value = "乘客扫码确认", notes = "订单确认，乘客扫码确认")
     @PutMapping("orderRecord/{id}/confirm")
-    public void confirm(@ApiParam(value = "主键ID", required = true) @PathVariable("id") Integer id) {
-        OrderRecord oldOrder = orderRecordService.getById(id);
-        if (!OrderRecordStatus.PAID.getCode().equals(oldOrder.getStatus())) {
-            throw new RuntimeException("订单状态异常");
-        }
+    public void confirm(@ApiParam(value = "主键ID", required = true) @PathVariable("id") Integer id,
+        @PathParam("driverId") Integer driverId) {
+        OrderRecord order = orderRecordService.getById(id);
 
         LambdaQueryWrapper<OrderRecord> wrapper = Wrappers.lambdaQuery(OrderRecord.class);
-        wrapper.lt(OrderRecord::getDepartureTime, oldOrder.getDepartureTime());
+        wrapper.lt(OrderRecord::getDepartureTime, order.getDepartureTime());
         wrapper.eq(OrderRecord::getStatus, OrderRecordStatus.PAID.getCode());
         long count = orderRecordService.count(wrapper);
         if (count > 0) {
             throw new RuntimeException("还存在上个车次的订单，请排队稍后再试");
         }
-
-        OrderRecord updater = new OrderRecord();
-        updater.setId(id);
-        updater.setStatus(OrderRecordStatus.COMPLETED.getCode());
-        this.orderRecordService.updateById(updater);
+        bizOrderService.confirm(id, driverId);
     }
 
     @ApiOperation(value = "司机扫码确认", notes = "订单确认，司机扫码确认")
     @PutMapping("orderRecord/{id}/driver/confirm")
     public void driverConfirm(@ApiParam(value = "主键ID", required = true) @PathVariable("id") Integer id) {
-        OrderRecord oldOrder = orderRecordService.getById(id);
-        if (!OrderRecordStatus.PAID.getCode().equals(oldOrder.getStatus())) {
-            throw new RuntimeException("订单状态异常");
+        User user = AuthenticationUtils.getUser();
+        if (!AuthenticationUtils.isDriver()) {
+            throw new RuntimeException("只有司机能操作");
         }
-        OrderRecord updater = new OrderRecord();
-        updater.setId(id);
-        updater.setStatus(OrderRecordStatus.COMPLETED.getCode());
-        this.orderRecordService.updateById(updater);
+        bizOrderService.confirm(id, user.getId());
     }
 
     @ApiOperation(value = "订单退款", notes = "订单退款")
