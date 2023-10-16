@@ -5,6 +5,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.bus.ticket.config.security.AuthenticationUserDetails;
+import com.bus.ticket.constant.UserTypeEnum;
 import com.bus.ticket.entity.User;
 
 /**
@@ -32,5 +33,13 @@ public class AuthenticationUtils {
             return au.getUser();
         }
         return null;
+    }
+
+    public static boolean isDriver() {
+        User user = getUser();
+        if (user == null) {
+            return false;
+        }
+        return UserTypeEnum.DRIVER.getType() == user.getType();
     }
 }

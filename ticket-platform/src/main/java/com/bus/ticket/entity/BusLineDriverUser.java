@@ -31,5 +31,8 @@ public class BusLineDriverUser implements Serializable {
     @ApiModelProperty(value = "线路ID")
     private Integer busLineId;
 
+    @ApiModelProperty(value = "路线收入，单位分")
+    private Long revenue;
+
     private Date creationTime;
 }
