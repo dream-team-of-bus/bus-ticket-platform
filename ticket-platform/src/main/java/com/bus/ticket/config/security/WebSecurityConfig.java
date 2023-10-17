@@ -62,6 +62,14 @@ public class WebSecurityConfig<S extends Session> extends WebSecurityConfigurerA
         List<String> authAntPatterns = new ArrayList<>();
         authAntPatterns.add("/static/**");
         authAntPatterns.add("/auth/**");
+
+        /**
+         * swagger相关路径放行
+         */
+        authAntPatterns.add("/swagger-ui/**");
+        authAntPatterns.add("/v2/**");
+        authAntPatterns.add("/v3/**");
+        authAntPatterns.add("/swagger-resources/**");
         String[] authAntPatternsValue = authAntPatterns.toArray(new String[authAntPatterns.size()]);
         http.authorizeRequests().antMatchers(authAntPatternsValue).permitAll();
         http.authorizeRequests().anyRequest().authenticated();
